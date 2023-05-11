@@ -1,0 +1,78 @@
+{% import "ui_components/ui_components.html" as ui_components %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} BookStacks | Download books in all formats for free {% endblock title %}</title>
+    <!-- Albert Sans Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Albert+Sans&display=swap" rel="stylesheet">
+
+    <!-- Jquery -->
+    <script src="{{ static('jquery/js/jquery.min.js') }}"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ static('bootstrap/css/bootstrap.min.css') }}">
+    <script src="{{ static('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ static('select2/css/select2.min.css') }}">
+    <script src="{{ static('select2/js/select2.min.js') }}"></script>
+
+    <!-- Base styles -->
+    <link rel="stylesheet" href="{{ static('base/css/base.css') }}">
+    <script src="{{ static('base/js/base.js') }}"></script>
+    <link rel="stylesheet" href="{{ static('base/css/helpers.css') }}">
+
+    <!-- UI components css -->
+    <link rel="stylesheet" href="{{ static('ui_components/css/ui_components.css') }}">
+
+    {% block stylesheets %}{% endblock stylesheets %}
+    {% block scripts %}{% endblock scripts %}
+</head>
+<body>
+<div class="book-upload-form-modal modal fade" id="book-upload-form-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Upload book</h3>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{{ url('book-upload') }}" enctype="multipart/form-data" id="book-upload-form">
+                    {{ csrf_input }}
+                    {{ crispy(book_upload_form) }}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-sm btn-success book-upload-form-submit">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of upload form -->
+
+<div class="top-bar">
+    {{ ui_components.SiteHeader(request.user) }}
+</div>
+
+<div class="main-content-container container">
+    {{ ui_components.Navigation(request.path_info) }}
+    {% block content %}{% endblock content %}
+</div>
+
+<footer>
+    <a class="attribution" target="_blank" href="https://icons8.com/icon/MmkqIRv7P6Xy/books-emoji">Books Emoji</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+</footer>
+
+{# Show the book-upload-form-modal when the form has errors #}
+{% if book_upload_form.errors %}
+<script>
+    $("#book-upload-form-modal").modal({show: true});
+</script>
+{% endif %}
+</body>

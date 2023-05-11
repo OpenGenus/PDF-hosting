@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} PDF Library {% endblock title %}</title>
+    <!-- Albert Sans Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Albert+Sans&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ static('bootstrap/css/bootstrap.min.css') }}">
+    <script rel="stylesheet" href="{{ static('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+    <!-- Base styles -->
+    <link rel="stylesheet" href="{{ static('base/css/base.css') }}">
+    <link rel="stylesheet" href="{{ static('base/css/helpers.css') }}">
+
+    {% block stylesheets %}{% endblock stylesheets %}
+    {% block scripts %}{% endblock scripts %}
+</head>
+<body>
+<div class="site-header py-3">
+    <a href="/" class="logo">PDFLibrary</a>
+</div>
+<div class="ui container">
+    {% block content %}{% endblock content %}
+</div>
+</body>

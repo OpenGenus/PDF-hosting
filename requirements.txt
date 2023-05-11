@@ -1,0 +1,12 @@
+asgiref==3.6.0
+crispy-bootstrap4==2022.1
+Django==4.1.7
+django-crispy-forms==2.0
+django-environ==0.10.0
+djangorestframework==3.14.0
+Jinja2==3.1.2
+MarkupSafe==2.1.2
+Pillow==9.5.0
+PyMuPDF==1.21.1
+pytz==2023.3
+sqlparse==0.4.3
