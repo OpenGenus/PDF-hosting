@@ -1,0 +1,42 @@
+.h-secondary-text {
+    color: #A6A6A6;
+    font-size: 11px;
+}
+
+.tabs {
+    -webkit-overflow-scrolling: touch;
+    align-items: stretch;
+    display: flex;
+    font-size: 18px;
+    justify-content: space-between;
+    overflow: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.tabs ul {
+    align-items: center;
+    border-bottom-color: #424242;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
+    list-style: none;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0;
+}
+.tabs li {
+    margin: 0;
+    padding: 0;
+    flex: 1 1 auto;
+}
+.tabs a {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: -1px;
+    padding: .5em 1em;
+    vertical-align: top;
+}

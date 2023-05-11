@@ -1,0 +1,20 @@
+{% extends "base/no_nav_base.html" %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ static('accounts/css/login.css') }}">
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="login-form-container">
+        <div class="d-flex flex-column align-items-center mb-2">
+            <h2 class="login-form-title">LOGIN</h2>
+            <span class="h-secondary-text">We have missed you</span>
+        </div>
+
+        <form class="login-form" method="post">
+            {{ csrf_input }}
+            {{ crispy(form) }}
+            <button class="btn btn-success btn-block">LOGIN</button>
+        </form>
+    </div>
+{% endblock content %}

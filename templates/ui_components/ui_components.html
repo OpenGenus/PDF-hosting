@@ -1,0 +1,134 @@
+{# Book #}
+{% macro Book(book) -%}
+<div class="book">
+    <div style="background-image: url('{{ book.cover_image_url }}')" class="book__cover-image"></div>
+    <div class="book__info">
+        <h2 class="book__title text-truncate">{{ book.title }}</h2>
+        <span class="book__page-count h-secondary-text">{{ book.num_of_pages }} Pages</span>
+        <span class="book__file-size h-secondary-text">{{ to_mbs(book.file_size) }} MB</span>
+        <span class="book__uploader h-secondary-text">Uploaded by: {% if book.uploader %} {{ book.uploader }} {% else %}
+            Anonymous {% endif %}</span>
+        <!--div class="book__actions">
+                <a href="{{ url('dmca-report', kwargs={'book_id': book.id}) }}" class="book__report-dmca btn btn-sm btn-outline-secondary">
+                    Report
+                </a>
+                <a href="{{ book.download_url }}" class="book__download btn btn-sm btn-outline-success">Download</a>
+            </div-->
+    </div>
+</div>
+{%- endmacro %}
+
+{# Book List #}
+{% macro BookList(books) -%}
+<div class="book-list">
+    {% for book in  books %}
+        {{ Book(book) }}
+    {% endfor %}
+</div>
+{%- endmacro %}
+
+{# Search Form #}
+{% macro SearchForm() -%}
+<form class="search-form" method="get" action="search">
+    <div class="search-form__field">
+        <input class="search-form__input form-control" type="text" placeholder="Search books..." required="required">
+    </div>
+    <button class="search-form__submit btn" type="submit">GO</button>
+</form>
+{%- endmacro %}
+
+
+{% macro Navigation(active_url) -%}
+<div class="navigation tabs is-medium">
+    {% set book_list_url =  url('book-list') %}
+    {% set book_category_list_url = url('book-category-list') %}
+    <ul>
+      <li class="navigation__item {% if active_url == book_list_url %} is-active {% endif %}">
+        <a class="navigation__link" href="{{ book_list_url }}">Books</a>
+      </li>
+      <li class="navigation__item {% if active_url == book_category_list_url %} is-active {% endif %}">
+        <a class="navigation__link" href="{{ book_category_list_url }}">Categories</a>
+      </li>
+    </ul>
+  </div>
+{%- endmacro %}
+
+{# Site Header #}
+{% macro SiteHeader(user) -%}
+<div class="site-header">
+    <a href="/" class="site-header__logo">
+        <img class="site-header__logo-img" src="{{ static('base/images/logo.png') }}">
+        BookStacks
+    </a>
+    <div class="site-header__search-form">
+        {{ SearchForm() }}
+    </div>
+    <div class="site-header__accounts d-flex my-auto">
+        <button class="btn btn-sm btn-primary mr-3" data-toggle="modal" data-target="#book-upload-form-modal">Upload
+        </button>
+        {% if user.is_authenticated %}
+            <a href="{{ url('logout') }}" class="btn btn-sm btn-outline-secondary mr-2">Logout</a>
+        {% endif %}
+    </div>
+</div>
+{%- endmacro %}
+
+{# Pagination #}
+{% macro Pagination(page_obj, num_of_visible_pages, base_url="") -%}
+{% set num_pages = page_obj.paginator.num_pages %}
+{% set current_page_number = page_obj.number %}
+{% set visible_range_start = page_obj.number - num_of_visible_pages %}
+{% set visible_range_end = num_of_visible_pages + page_obj.number %}
+{% set show_last_page = current_page_number < (num_pages - num_of_visible_pages) %}
+{# Say num_of_visible_pages = 3 and when the current page(say 5) which is > (3 + 1 = 4), It implies there is atleast #}
+{# one page before the visible_range_start ie page 1, page 2 that should be represented with an ellipsis #}
+{% set show_left_ellipsis = current_page_number > (num_of_visible_pages + 1) %}
+{# Say num_of_visible_pages = 3, the current page is 5 and the total number of pages is 12, #}
+{# For all pages after the current page(5) to be shown, the current page number should be with in #}
+{# 3 steps to the left from the last page #}
+{% set show_right_ellipsis = current_page_number < (num_pages - (num_of_visible_pages + 1)) %}
+<div class="d-flex align-items-center justify-content-center">
+    <ul class="pagination mt-3">
+        {% if page_obj.has_previous() %}
+            <li>
+                <a class="page-link" href="{{ base_url }}?page={{ page_obj.previous_page_number() }}"> < </a>
+            </li>
+            {% if page_obj.number > (num_of_visible_pages + 1) %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ base_url }}?page=1">1</a>
+                </li>
+            {% endif %}
+            {% if show_left_ellipsis %}
+                <li class="page-item">
+                    <a class="page-link" href="">...</a>
+                </li>
+            {% endif %}
+        {% endif %}
+        {% for page_num in page_obj.paginator.page_range %}
+            {% if page_num == current_page_number %}
+                <li class="page-item active">
+                    <a class="page-link" href="{{ base_url }}?page={{ page_num }}">{{ page_num }}</a>
+                </li>
+            {% elif page_num >= visible_range_start and page_num <= visible_range_end %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ base_url }}?page={{ page_num }}">{{ page_num }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next() %}
+            {% if show_right_ellipsis %}
+                <li class="page-item"><a class="page-link">...</a></li>
+            {% endif %}
+            {% if show_last_page %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ base_url }}?page={{ num_pages }}">{{ num_pages }}</a>
+                </li>
+            {% endif %}
+            <li class="page-item">
+                <a class="page-link" href="{{ base_url }}?page={{ page_obj.next_page_number() }}"> > </a>
+            </li>
+        {% endif %}
+    </ul>
+</div>
+{%- endmacro %}
